@@ -3,8 +3,10 @@ package me.camdenorrb.kdi
 import me.camdenorrb.kdi.produce.Producer
 import kotlin.reflect.KClass
 
+
 object KDI {
 
+    // KClass of type --> Name of stored value --> Producer
     val registry = mutableMapOf<KClass<*>, MutableMap<String, Producer<*>>>()
 
 
@@ -17,9 +19,13 @@ object KDI {
         return get(T::class, name)
     }
 
-    @Suppress("UNCHECKED_CAST")
     fun <T : Any> get(clazz: KClass<T>, name: String = ""): T {
-        return registry[clazz]?.get(name)?.get() as T
+        try {
+            return registry[clazz]?.get(name)?.get() as T
+        }
+        catch (ex: TypeCastException) {
+            error("Could not get the value for ${clazz.simpleName} with name '$name'")
+        }
     }
 
 

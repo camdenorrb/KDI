@@ -2,7 +2,7 @@ import me.camdenorrb.kdi.KDI
 import me.camdenorrb.kdi.ext.inject
 
 
-fun main(args: Array<String>) {
+fun main() {
 
     val example = ProducerExample()
 
@@ -11,18 +11,18 @@ fun main(args: Array<String>) {
 }
 
 
-class ProducerExample {
+class ProducerExample(val kdi: KDI) {
 
     val producer = Producer()
 
 
     fun start() {
-        KDI.insert(producer::createDependency)
+        kdi.insert(producer::createDependency)
         println(ExampleRequester().dependency)
     }
 
     fun stop() {
-        KDI.clear()
+        kdi.clear()
     }
 
 

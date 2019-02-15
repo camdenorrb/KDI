@@ -14,7 +14,8 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
-    implementation("com.sxtanna.korm:Korm:+")
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
+    //implementation("com.sxtanna.korm:Korm:+")?
 }
 
 tasks.withType<KotlinCompile> {
