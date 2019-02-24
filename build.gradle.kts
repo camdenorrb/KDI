@@ -9,11 +9,13 @@ group = "me.camdenorrb"
 version = "1.0.0"
 
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
+    implementation("me.camdenorrb:KCommons:+")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     //implementation("com.sxtanna.korm:Korm:+")?
 }

@@ -4,7 +4,7 @@ import me.camdenorrb.kdi.produce.Producer
 import kotlin.reflect.KClass
 
 
-object KDI {
+class KDI {
 
     // KClass of type --> Name of stored value --> Producer
     val registry = mutableMapOf<KClass<*>, MutableMap<String, Producer<*>>>()
@@ -45,13 +45,13 @@ object KDI {
     inline fun <reified R : Any> insert(name: String = "", noinline block: () -> R) {
 
         val clazz = R::class
-        val entry = registry.getOrPut(clazz, ::mutableMapOf)
+        val entry = registry.getOrPut(clazz) { mutableMapOf() }
 
         entry[name] = Producer(name, clazz, block)
     }
 
     fun <R : Any> insert(producer: Producer<R>) {
-        val entry = registry.getOrPut(producer.clazz, ::mutableMapOf)
+        val entry = registry.getOrPut(producer.clazz) { mutableMapOf() }
         entry[producer.name] = producer
     }
 
