@@ -4,7 +4,7 @@ import me.camdenorrb.kdi.produce.Producer
 import kotlin.reflect.KClass
 
 
-class KDI {
+object KDI {
 
     // KClass of type --> Name of stored value --> Producer
     val registry = mutableMapOf<KClass<*>, MutableMap<String, Producer<*>>>()
