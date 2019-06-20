@@ -1,13 +1,15 @@
 package me.camdenorrb.kdi
 
 import me.camdenorrb.kdi.produce.Producer
-import kotlin.reflect.KClass
+import kotlin.reflect.KType
+import kotlin.reflect.jvm.javaType
+import kotlin.reflect.typeOf
 
 
 object KDI {
 
     // KClass of type --> Name of stored value --> Producer
-    val registry = mutableMapOf<KClass<*>, MutableMap<String, Producer<*>>>()
+    val registry = mutableMapOf<KType, MutableMap<String, Producer<*>>>()
 
 
     fun clear() {
@@ -15,16 +17,17 @@ object KDI {
     }
 
 
-    inline fun <reified T : Any> get(name: String = ""): T {
-        return get(T::class, name)
+    @ExperimentalStdlibApi
+    inline fun <reified T> get(name: String = ""): T {
+        return get(typeOf<T>(), name)
     }
 
-    fun <T : Any> get(clazz: KClass<T>, name: String = ""): T {
+    fun <T> get(type: KType, name: String = ""): T {
         try {
-            return registry[clazz]?.get(name)?.get() as T
+            return registry[type]?.get(name)?.get() as T
         }
         catch (ex: TypeCastException) {
-            error("Could not get the value for ${clazz.simpleName} with name '$name'")
+            error("Could not get the value for ${type.javaType.typeName} with name '$name'")
         }
     }
 
@@ -32,56 +35,66 @@ object KDI {
     fun insertAll(block: KDI.() -> Unit) {
         block(this)
     }
-
+/*
+    @ExperimentalStdlibApi
     fun insertAll(vararg producers: Producer<*>) {
         producers.forEach { insert(it) }
-    }
+    }*/
 
 
-    inline fun <reified R : Any> insert(noinline block: () -> R) {
+    @ExperimentalStdlibApi
+    inline fun <reified R> insert(noinline block: () -> R) {
         insert("", block)
     }
 
-    inline fun <reified R : Any> insert(name: String = "", noinline block: () -> R) {
+    @ExperimentalStdlibApi
+    inline fun <reified R> insert(name: String = "", noinline block: () -> R) {
 
-        val clazz = R::class
-        val entry = registry.getOrPut(clazz) { mutableMapOf() }
+        val type = typeOf<R>()
+        val entry = registry.getOrPut(type) { mutableMapOf() }
 
-        entry[name] = Producer(name, clazz, block)
+        entry[name] = Producer(name, type, block)
     }
 
-    fun <R : Any> insert(producer: Producer<R>) {
-        val entry = registry.getOrPut(producer.clazz) { mutableMapOf() }
+    @ExperimentalStdlibApi
+    inline fun <reified R> insert(producer: Producer<R>) {
+        val entry = registry.getOrPut(typeOf<R>()) { mutableMapOf() }
         entry[producer.name] = producer
     }
 
 
-    inline fun <reified R : Any> remove() {
-        remove(R::class)
+    @ExperimentalStdlibApi
+    inline fun <reified R> remove() {
+        remove(typeOf<R>())
     }
 
-    inline fun <reified R : Any> remove(name: String) {
-        remove(R::class, name)
-    }
-
-
-    fun <R : Any> remove(clazz: KClass<R>) {
-        registry.remove(clazz)
-    }
-
-    fun <R : Any> remove(clazz: KClass<R>, name: String) {
-        registry.remove(clazz)?.remove(name)
+    @ExperimentalStdlibApi
+    inline fun <reified R> remove(name: String) {
+        remove(typeOf<R>(), name)
     }
 
 
-    inline fun <reified R : Any> KDI.producer(noinline block: () -> R) {
+    fun remove(type: KType) {
+        registry.remove(type)
+    }
+
+    fun remove(type: KType, name: String) {
+        registry.remove(type)?.remove(name)
+    }
+
+
+    @ExperimentalStdlibApi
+    inline fun <reified R> KDI.producer(noinline block: () -> R) {
         producer("", block)
     }
 
-    inline fun <reified R : Any> KDI.producer(name: String = "", noinline block: () -> R) {
+    @ExperimentalStdlibApi
+    inline fun <reified R> KDI.producer(name: String = "", noinline block: () -> R) {
 
-        val producer = Producer(name, R::class, block)
-        val entry = registry.getOrPut(producer.clazz) { mutableMapOf() }
+        val type = typeOf<R>()
+
+        val producer = Producer(name, type, block)
+        val entry = registry.getOrPut(type) { mutableMapOf() }
 
         entry[producer.name] = producer
     }

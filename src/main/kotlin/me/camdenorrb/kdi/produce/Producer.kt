@@ -1,8 +1,8 @@
 package me.camdenorrb.kdi.produce
 
-import kotlin.reflect.KClass
+import kotlin.reflect.KType
 
-class Producer<R : Any>(val name: String, val clazz: KClass<R>, val block: () -> R) {
+class Producer<R>(val name: String, val type: KType, val block: () -> R) {
 
     private var value: R? = null
 
