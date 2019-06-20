@@ -9,10 +9,10 @@ group = "me.camdenorrb"
 version = "1.0.1"
 
 repositories {
-    
+
     mavenLocal()
     mavenCentral()
-    
+
     maven("https://jitpack.io")
 }
 
@@ -27,5 +27,6 @@ dependencies {
 }
 
 tasks.withType<KotlinCompile> {
+    kotlinOptions.freeCompilerArgs = listOf("-Xuse-experimental=kotlin.ExperimentalStdlibApi")
     kotlinOptions.jvmTarget = "1.8"
 }

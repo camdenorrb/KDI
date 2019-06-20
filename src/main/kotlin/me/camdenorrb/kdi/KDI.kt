@@ -17,7 +17,6 @@ object KDI {
     }
 
 
-    @ExperimentalStdlibApi
     inline fun <reified T> get(name: String = ""): T {
         return get(typeOf<T>(), name)
     }
@@ -36,18 +35,18 @@ object KDI {
         block(this)
     }
 /*
-    @ExperimentalStdlibApi
+
     fun insertAll(vararg producers: Producer<*>) {
         producers.forEach { insert(it) }
     }*/
 
 
-    @ExperimentalStdlibApi
+
     inline fun <reified R> insert(noinline block: () -> R) {
         insert("", block)
     }
 
-    @ExperimentalStdlibApi
+
     inline fun <reified R> insert(name: String = "", noinline block: () -> R) {
 
         val type = typeOf<R>()
@@ -56,19 +55,19 @@ object KDI {
         entry[name] = Producer(name, type, block)
     }
 
-    @ExperimentalStdlibApi
+
     inline fun <reified R> insert(producer: Producer<R>) {
         val entry = registry.getOrPut(typeOf<R>()) { mutableMapOf() }
         entry[producer.name] = producer
     }
 
 
-    @ExperimentalStdlibApi
+
     inline fun <reified R> remove() {
         remove(typeOf<R>())
     }
 
-    @ExperimentalStdlibApi
+
     inline fun <reified R> remove(name: String) {
         remove(typeOf<R>(), name)
     }
@@ -83,12 +82,12 @@ object KDI {
     }
 
 
-    @ExperimentalStdlibApi
+
     inline fun <reified R> KDI.producer(noinline block: () -> R) {
         producer("", block)
     }
 
-    @ExperimentalStdlibApi
+
     inline fun <reified R> KDI.producer(name: String = "", noinline block: () -> R) {
 
         val type = typeOf<R>()
