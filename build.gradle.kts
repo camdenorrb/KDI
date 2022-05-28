@@ -22,7 +22,7 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
 
     implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("com.github.camdenorrb:KCommons:V1.0.3")
+    implementation("com.github.camdenorrb:KCommons:V1.1.0")
     //implementation("com.sxtanna.korm:Korm:+")?
 }
 
