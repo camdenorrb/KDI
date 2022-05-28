@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("maven-publish")
-    kotlin("jvm") version "1.3.40"
+    kotlin("jvm") version "1.6.21"
 }
 
 group = "me.camdenorrb"
