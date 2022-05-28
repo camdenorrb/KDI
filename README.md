@@ -1,3 +1,5 @@
+**Please don't use this, dependency injection is gross and moves compile time issues to runtime!**
+
 **Example:**
 
 ```kotlin
